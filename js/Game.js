@@ -22,7 +22,7 @@ class Game {
 
   // Start Menu: decorative patterns and a quick explainer of the rules
   startMenu() {
-    ;
+    this.startMenuLoop(0);
   }
 
   // Start gameplay: reset score, reset timer, reset difficulty, reset drawing
@@ -36,8 +36,21 @@ class Game {
     this.gameLoop(0);
   }
 
+  // Main menu loop: run at the beginning
+  startMenuLoop(time) {
+    window.requestAnimationFrame(t => this.startMenuLoop(t));
+  }
+
   // Main game loop: Check time between frames, update game mechanics
   gameLoop(time) {
+    let elapsed = (time - this.frameTimer) / 1000; // Time since last frame (in seconds)
+    this.update(elapsed);
+    this.frameTimer = time;
+    window.requestAnimationFrame(t => this.gameLoop(t));  // Request next frame
+  }
+
+  // Test game loop: Run just whatever I'm testing at the moment
+  testLoop(time) {
     let elapsed = (time - this.frameTimer) / 1000; // Time since last frame (in seconds)
     this.update(elapsed);
     this.frameTimer = time;
@@ -67,7 +80,7 @@ class Game {
 
   // Test function for examining whatever I'm working on at the moment
   testCode() {
-    text = new TextProcessing(this);
+    const text = new TextProcessing(this);
     text.prepTargets();
 
     this.score = 0;
@@ -79,14 +92,14 @@ class Game {
     this.context.font = '40px serif';
 
     this.snake = new Snake(this);
-    this.snake.text = "ﺔﻴﺑﺮﻌﻟﺍ"; // VSCode renders this unicode block RTL but it should be rendered LTR...
+    this.snake.text = [..."ﺔﻴﺑﺮﻌﻟﺍ"]; // VSCode renders this unicode block RTL but it should be rendered LTR...
     this.snake.pathPoints.unshift([0,0,0]);
     this.target = new Target(this);
     this.target.xPosition = -200;
     this.target.yPosition = 0;
     this.snake.toTarget = this.snake.distanceToTarget();
 
-    this.gameLoop(0);
+    this.testLoop(0);
 
   }
 }

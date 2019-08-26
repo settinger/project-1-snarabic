@@ -14,7 +14,7 @@ class Snake {
     this.rotationalVelocityMultiplier = 1;
 
     // Textpath properties
-    this.text = '';
+    this.text = [];
     this.pathPoints = []; // Every point in this array should be of the form [x, y, heading]
 
     // Target properties

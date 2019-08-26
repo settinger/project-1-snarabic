@@ -18,6 +18,9 @@ class Game {
     this.score = 0;
     this.startTime = new Date();
     this.frameTimer = 0;
+
+    // Set up background image
+    
   }
 
   // Start Menu: decorative patterns and a quick explainer of the rules
@@ -27,11 +30,28 @@ class Game {
 
   // Start gameplay: reset score, reset timer, reset difficulty, reset drawing
   start() {
+    this.text = new TextProcessing(this);
+    this.text.prepTargets();
+    
+    this.target = new Target(this);
+    this.target.xPosition = -200;
+    this.target.yPosition = 0;
+
     this.score = 0;
     this.startTime = new Date();
     this.frameTimer = 0;
 
+    this.context.textAlign = 'center';
+    this.context.textBaseline = 'middle';
+    this.context.font = '40px serif';
+
     this.snake = new Snake(this);
+    this.snake.text = [];
+    this.snake.text.unshift(this.text.targets.shift());
+    this.snake.pathPoints.unshift([0,0,0]);
+    this.snake.toTarget = this.snake.distanceToTarget();
+
+    this.target.text = this.text.targets.shift();
 
     this.gameLoop(0);
   }
@@ -62,9 +82,8 @@ class Game {
     this.snake.update(dt);
     this.target.update(dt);
 
-    let offset = 0; // DELETE THIS LINE LATER
     this.clear();
-    this.draw(offset);
+    this.draw();
   }
 
   // Clear screen: clear all graphics before drawing new frame
@@ -73,7 +92,9 @@ class Game {
   }
 
   // Draw screen: Draw snake, target, special effects
-  draw(offset) {
+  draw() {
+    // Draw background
+    this.background.draw();
     this.snake.drawText();
     this.target.draw();
   }
@@ -83,6 +104,8 @@ class Game {
     this.text = new TextProcessing(this);
     this.text.prepTargets();
     
+    this.background = new Background(this);
+
     this.target = new Target(this);
     this.target.xPosition = -200;
     this.target.yPosition = 0;

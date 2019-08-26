@@ -13,15 +13,15 @@ class Target {
   }
 
   draw() {
-    const ctx = this.game.context;    
+    const ctx = this.game.context;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.font = '40px serif';
     ctx.fillText(this.text, this.xPosition, this.yPosition);
-    // ctx.beginPath()
-    // ctx.arc(this.xPosition, this.yPosition, 10, 0, 2*Math.PI);
-    // ctx.fill();
-    // ctx.closePath();
+    ctx.beginPath()
+    ctx.arc(this.xPosition, this.yPosition, 15, 0, 2*Math.PI);
+    ctx.stroke();
+    ctx.closePath();
   }
 
   setPosition(x,y) {

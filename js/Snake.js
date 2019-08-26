@@ -9,9 +9,9 @@ class Snake {
     this.yPosition = 0; // Position of snake's head
     this.angle = 0; // Heading of the front of the snake, measured in radians, clockwise from due-right
     this.linearVelocity = 0; // Measured in pixels per second
-    this.linearVelocityMultiplier = 50;
+    this.linearVelocityMultiplier = 75;
     this.rotationalVelocity = 0; // Measured in radians per second
-    this.rotationalVelocityMultiplier = 1;
+    this.rotationalVelocityMultiplier = 1.5;
 
     // Textpath properties
     this.text = [];
@@ -64,7 +64,10 @@ class Snake {
       let x = this.pathPoints[i][0];
       let y = this.pathPoints[i][1];
       this.rotatedChar(char, angle, x, y);
-      // TODO: Speed boost: stop rendering characters when they go off the screen
+      // Speed boost: stop rendering characters when they go off the screen
+      if (x > (this.game.width/2)*1.1) {
+        break;
+      }
       
       // Get the width of the character
       let txtMeasure = this.game.context.measureText(char);
@@ -109,6 +112,7 @@ class Snake {
     // Subtract this.xPosition from target and pathPoints x positions (so snake stays fixed in the center of the screen)
     let offset = this.xPosition;
     this.xPosition -= offset;
+    this.game.background.xPosition -= offset/this.game.background.parallax;
     this.game.target.xPosition -= offset;
     this.pathPoints = this.pathPoints.map(x => [x[0] - offset, x[1], x[2]]);
 
@@ -134,9 +138,9 @@ class Snake {
         }
       }
 
-
       // Calculate next target's position
       let randomY = this.game.height*Math.random() - this.game.height/2
+      randomY *= 0.8 // Don't let the target get too close to the top/bottom of the screen
       this.game.target.setPosition(-200,randomY);
     }
   }

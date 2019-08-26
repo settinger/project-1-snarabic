@@ -2,3 +2,8 @@
   font-family: "NotoSansArabicRegular";
   src: url('assets/NotoSansArabic-Regular.ttf');
 }
+
+@font-face {
+  font-family: "Merienda";
+  src: url('assets/Merienda-Regular.ttf');
+}

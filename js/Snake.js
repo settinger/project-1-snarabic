@@ -94,8 +94,10 @@ class Snake {
     let dY = this.game.target.yPosition - this.yPosition;
     let newAngle = Math.atan2(dY, dX) - this.angle;
     // If newAngle is significantly anti-clockwise, unwrap it
-    while (newAngle < -0.1) {newAngle += 2*Math.PI};
-    this.rotationalVelocity = newAngle * this.rotationalVelocityMultiplier; // Probably need to multiply by an adjustment
+    while (newAngle < -0.1) { newAngle += 2*Math.PI; }
+    this.rotationalVelocity = newAngle * this.rotationalVelocityMultiplier;
+    // Very slightly increase rotationalvelocitymultiplier as time goes on, to prevent infinite orbits
+    this.rotationalVelocityMultiplier += 0.5*dt;
 
     // Advance snake a certain distance
     let dx = Math.cos(this.angle) * this.linearVelocity * dt;
@@ -119,6 +121,8 @@ class Snake {
 
     // If snake is at target:
     if (this.atTarget()) {
+      // Reset rotational velocity multiplier
+      this.rotationalVelocityMultiplier = 1.5;
 
       // Check if any text was stowed; add stowed text to snake.text
       while (this.stowedText.length > 0) {

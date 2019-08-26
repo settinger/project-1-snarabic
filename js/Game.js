@@ -18,9 +18,6 @@ class Game {
     this.score = 0;
     this.startTime = new Date();
     this.frameTimer = 0;
-
-    // Set up background image
-    
   }
 
   // Start Menu: decorative patterns and a quick explainer of the rules

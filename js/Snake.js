@@ -45,7 +45,7 @@ class Snake {
     ctx.save();
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.font = '40px serif';
+    ctx.font = '40px NotoSansArabicRegular';
     ctx.translate(x, y);
     ctx.rotate(Math.PI/180 * angle);
     ctx.translate(-x, -y);
@@ -58,6 +58,7 @@ class Snake {
     let i = 0;
     let j = 0;
     let dx = 0;
+    this.game.context.font = '40px NotoSansArabicRegular';
     for (let char of [...this.text]) {
       // Draw character using [x,y,heading] at this.pathPoints[i]
       let angle = this.pathPoints[i][2]*180/Math.PI + 180;

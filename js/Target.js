@@ -16,7 +16,7 @@ class Target {
     const ctx = this.game.context;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.font = '40px serif';
+    ctx.font = '40px NotoSansArabicRegular';
     ctx.fillText(this.text, this.xPosition, this.yPosition);
     ctx.beginPath()
     ctx.arc(this.xPosition, this.yPosition, 15, 0, 2*Math.PI);

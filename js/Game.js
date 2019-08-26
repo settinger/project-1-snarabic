@@ -80,8 +80,12 @@ class Game {
 
   // Test function for examining whatever I'm working on at the moment
   testCode() {
-    const text = new TextProcessing(this);
-    text.prepTargets();
+    this.text = new TextProcessing(this);
+    this.text.prepTargets();
+    
+    this.target = new Target(this);
+    this.target.xPosition = -200;
+    this.target.yPosition = 0;
 
     this.score = 0;
     this.startTime = new Date();
@@ -92,12 +96,12 @@ class Game {
     this.context.font = '40px serif';
 
     this.snake = new Snake(this);
-    this.snake.text = [..."ﺔﻴﺑﺮﻌﻟﺍ"]; // VSCode renders this unicode block RTL but it should be rendered LTR...
+    this.snake.text = [];
+    this.snake.text.unshift(this.text.targets.shift());
     this.snake.pathPoints.unshift([0,0,0]);
-    this.target = new Target(this);
-    this.target.xPosition = -200;
-    this.target.yPosition = 0;
     this.snake.toTarget = this.snake.distanceToTarget();
+
+    this.target.text = this.text.targets.shift();
 
     this.testLoop(0);
 

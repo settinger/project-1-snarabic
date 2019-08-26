@@ -15,6 +15,7 @@ class Snake {
 
     // Textpath properties
     this.text = [];
+    this.stowedText = [];
     this.pathPoints = []; // Every point in this array should be of the form [x, y, heading]
 
     // Target properties
@@ -35,7 +36,7 @@ class Snake {
 
   // Function to determine if snake is at the target
   atTarget() {
-    return this.distanceToTarget() < 5;
+    return this.distanceToTarget() < 10;
   }
 
   // Function to draw a single rotated character at position (x, y)
@@ -104,5 +105,39 @@ class Snake {
     
     // Update array of pathPoints
     this.pathPoints.unshift([this.xPosition, this.yPosition, this.angle]);
+
+    // Subtract this.xPosition from target and pathPoints x positions (so snake stays fixed in the center of the screen)
+    let offset = this.xPosition;
+    this.xPosition -= offset;
+    this.game.target.xPosition -= offset;
+    this.pathPoints = this.pathPoints.map(x => [x[0] - offset, x[1], x[2]]);
+
+    // If snake is at target:
+    if (this.atTarget()) {
+
+      // Check if any text was stowed; add stowed text to snake.text
+      while (this.stowedText.length > 0) {
+        this.text.unshift(this.stowedText.pop());
+      }
+
+      // Add the target's text to snake.text
+      this.text.unshift([this.game.target.text]);
+
+      // Find next target text (if invalid text is found first, stow it)
+      let newTargetFound = false;
+      while (!newTargetFound) {
+        this.game.target.text = this.game.text.targets.shift();
+        if (this.game.text.alphabet.includes(this.game.target.text[1])) {
+          newTargetFound = true;
+        } else {
+          this.stowedText.unshift(this.game.target.text);
+        }
+      }
+
+
+      // Calculate next target's position
+      let randomY = this.game.height*Math.random() - this.game.height/2
+      this.game.target.setPosition(-200,randomY);
+    }
   }
 }

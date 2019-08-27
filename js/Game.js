@@ -28,9 +28,12 @@ class Game {
 
   // Start Menu: decorative patterns and a quick explainer of the rules
   startMenu() {
+    // remove game keyboard listener
+    window.removeEventListener('keydown', this.controls.gameListener);
     // add keyboard listener
     window.addEventListener('keydown', this.controls.mainMenuListener);
     this.background = new Background(this);
+    this.isInPlay = false;
     this.startMenuLoop(0);
   }
 
@@ -106,6 +109,7 @@ class Game {
 
   // Update game: compute how far things should have moved since the last frame, draw them
   update(dt) {
+    this.gameplayUpdate();
     this.snake.update(dt);
     this.target.update(dt);
 
@@ -130,5 +134,56 @@ class Game {
     this.background.draw();
     this.snake.drawText();
     this.target.draw();
+  }
+
+  gameplayUpdate() {
+    // If snake is at target:
+    if (this.snake.atTarget()) {
+      // Calculate next target's position
+      let randomY = this.height*Math.random() - this.height/2;
+      randomY *= 0.8 // Don't let the target get too close to the top/bottom of the screen
+      this.target.setPosition(-200, randomY);
+
+      // Reset snake's rotational velocity multiplier
+      this.snake.rotationalVelocityMultiplier = this.snake.initialRotationalVelocityMultiplier;
+
+      // Check if any text was stowed before this target; add any stowed text to the snake
+      while (this.snake.stowedText.length > 0) {
+        this.snake.text.unshift(this.snake.stowedText.pop());
+      }
+
+      // Now, add the text from the target to the snake's head
+      this.snake.text.unshift([this.target.text]);
+
+      // Compute the next target's text
+      // If invalid characters are found (e.g. punctuation, spaces), stow them
+      let newTargetFound = false;
+      while (!newTargetFound) {
+        this.target.text = this.text.targets.shift();
+        if (this.text.alphabet.includes(this.target.text[1])) {
+          newTargetFound = true;
+        } else {
+          this.snake.stowedText.unshift(this.target.text);
+        }
+      }
+
+      // Set the expected keypresses for the new target
+      this.target.expectedKeys = this.target.expected(this.target.text);
+      console.log(this.target.expectedKeys);
+
+      // SCORING: If player pressed the target keypresses before snake reached the target, add points
+      console.log(this.score);
+      if (this.target.expecting && this.target.success) {
+        this.score++;
+        this.target.success = false;
+      } else {
+        // If target keypresses weren't hit in time:
+        this.score -= 10;
+        if (this.score < -100) {
+          // Restart game
+          this.startMenu();
+        }
+      }
+    }
   }
 }

@@ -122,51 +122,5 @@ class Snake {
 
     // Performance improvement: discard path points that are more than 2 screenwidths off-screen
     this.pathPoints = this.pathPoints.filter(p => p[0] < this.game.width*2);
-
-    // If snake is at target:
-    if (this.atTarget()) {
-      // Calculate next target's position
-      let randomY = this.game.height*Math.random() - this.game.height/2
-      randomY *= 0.8 // Don't let the target get too close to the top/bottom of the screen
-      this.game.target.setPosition(-200,randomY);
-
-      // Reset rotational velocity multiplier
-      this.rotationalVelocityMultiplier = this.initialRotationalVelocityMultiplier;
-
-      // Check if any text was stowed; add stowed text to snake.text
-      while (this.stowedText.length > 0) {
-        this.text.unshift(this.stowedText.pop());
-      }
-
-      // Add the target's text to snake.text
-      this.text.unshift([this.game.target.text]);
-
-      // Find next target text (if invalid text is found first, stow it)
-      let newTargetFound = false;
-      while (!newTargetFound) {
-        this.game.target.text = this.game.text.targets.shift();
-        if (this.game.text.alphabet.includes(this.game.target.text[1])) {
-          newTargetFound = true;
-        } else {
-          this.stowedText.unshift(this.game.target.text);
-        }
-      }
-      this.game.target.expectedKeys = this.game.target.expected(this.game.target.text);
-      console.log(this.game.target.expectedKeys);
-
-      // Check if the target keypresses were already entered
-      if (this.game.target.expecting && this.game.target.success) {
-        // Increase score
-        this.game.score++;
-        this.game.target.success = false;
-        
-      } else {
-        // If target keypresses weren't entered in time:
-        this.game.score -= 10;
-        if (this.game.score < -100) {
-          // Restart game
-        }
-      }
-    }
   }
 }

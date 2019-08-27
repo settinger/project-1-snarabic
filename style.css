@@ -7,3 +7,16 @@
   font-family: "Merienda";
   src: url('assets/Merienda-Regular.ttf');
 }
+
+body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: black;
+  color: #EBFFFF;
+}
+
+canvas {
+  background-color: white;
+}

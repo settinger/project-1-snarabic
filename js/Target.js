@@ -9,6 +9,7 @@ class Target {
     this.dx = 0; // dx is only used for shaking the target left-right when wrong key is pressed
     this.text = ''; // The characters rendered inside the target circle
     this.expecting = false; // Whether or not the game is expecting keypresses
+    this.teacher = false; // Teacher mode (puts the expected keys above the target)
     this.expectedKeys = [] // The keypress(es) expected by game listener
     this.success = false; // True if user has pressed the right keys before snake reaches target
     this.lastWrongKey = 1; // Time since last wrong keypress was recorded (used to shake screen)
@@ -16,8 +17,8 @@ class Target {
 
   // Update function: Only used to calculate this.dx, to shake the target left-right if the wrong key was pressed
   update(dt) {
-    if (0 < this.lastWrongKey && this.lastWrongKey <= .75) {
-      this.dx = 20*Math.sin(12*Math.PI*this.lastWrongKey);
+    if (0 < this.lastWrongKey && this.lastWrongKey <= .4) {
+      this.dx = 20*Math.sin(18*Math.PI*this.lastWrongKey);
     } else {
       this.dx = 0;
     }
@@ -41,11 +42,18 @@ class Target {
       ctx.strokeStyle = 'black';
       ctx.fillStyle = 'black';
     }
+    
     ctx.fillText(this.text, this.xPosition+this.dx, this.yPosition);
     ctx.beginPath()
     ctx.arc(this.xPosition+this.dx, this.yPosition, 15, 0, 2*Math.PI);
     ctx.stroke();
     ctx.closePath();
+    
+    if (this.teacher) {
+      ctx.font = '20px serif';
+      ctx.fillText(this.expectedKeys.join(''), this.xPosition+20, this.yPosition-20);
+    }
+
     ctx.restore();
   }
 

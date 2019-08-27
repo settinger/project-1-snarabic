@@ -169,12 +169,13 @@ class Game {
       // Set the expected keypresses for the new target
       this.target.expectedKeys = this.target.expected(this.target.text);
       console.log(this.target.expectedKeys);
+      this.target.lastWrongKey = 1;
 
       // SCORING: If player pressed the target keypresses before snake reached the target, add points
       if (this.target.expecting && this.target.success) {
         this.score++;
         this.target.success = false;
-      } else {
+      } else if (this.target.expecting) {
         // If target keypresses weren't hit in time:
         this.score -= 10;
         if (this.score < -50) {

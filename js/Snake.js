@@ -125,6 +125,11 @@ class Snake {
 
     // If snake is at target:
     if (this.atTarget()) {
+      // Calculate next target's position
+      let randomY = this.game.height*Math.random() - this.game.height/2
+      randomY *= 0.8 // Don't let the target get too close to the top/bottom of the screen
+      this.game.target.setPosition(-200,randomY);
+
       // Reset rotational velocity multiplier
       this.rotationalVelocityMultiplier = this.initialRotationalVelocityMultiplier;
 
@@ -146,16 +151,22 @@ class Snake {
           this.stowedText.unshift(this.game.target.text);
         }
       }
-
-      // Update expected keypresses for target, reset target.expected and target.success
-      this.game.target.success = false;
       this.game.target.expectedKeys = this.game.target.expected(this.game.target.text);
       console.log(this.game.target.expectedKeys);
 
-      // Calculate next target's position
-      let randomY = this.game.height*Math.random() - this.game.height/2
-      randomY *= 0.8 // Don't let the target get too close to the top/bottom of the screen
-      this.game.target.setPosition(-200,randomY);
+      // Check if the target keypresses were already entered
+      if (this.game.target.expecting && this.game.target.success) {
+        // Increase score
+        this.game.score++;
+        this.game.target.success = false;
+        
+      } else {
+        // If target keypresses weren't entered in time:
+        this.game.score -= 10;
+        if (this.game.score < -100) {
+          // Restart game
+        }
+      }
     }
   }
 }

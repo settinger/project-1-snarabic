@@ -55,7 +55,7 @@ class Background {
     this.game.context.font = "30px Merienda";
     this.game.context.fillText("(Snake Arabic)", 0, 20);
     this.game.context.font = "30px serif";
-    this.game.context.fillText("Press ʼalif to begin", 0, 100);
+    this.game.context.fillText("Press ʼalif [A] to begin", 0, 100);
     // this.game.context.fillText("Press A to begin", 0, 100);
     this.game.context.restore();
   }

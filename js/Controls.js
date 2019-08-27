@@ -15,6 +15,9 @@ class Controls {
   startMenuEventListener(event) {
     if (event.code === "KeyA") {
       this.game.start();
+    } else if (event.code === "KeyX") {
+      this.game.start();
+      this.game.target.expecting = false;
     }
   }
 

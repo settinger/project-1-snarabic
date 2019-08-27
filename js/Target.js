@@ -72,7 +72,7 @@ class Target {
       case 'ه':       // heh
         return ['h'];
       case 'ت':       // teh
-      case 'ط'        // tah
+      case 'ط':       // tah
         return ['t'];
       case 'ث':       // theh
         return ['t', 'h'];

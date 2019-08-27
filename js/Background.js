@@ -33,10 +33,12 @@ class Background {
 
   // Draw function for main menu: render a 3x3 array of tiles and then render the text
   mainMenuDraw() {
-    const xArray = [this.xPosition % this.background.width,
+    const xArray = [this.xPosition % this.background.width + this.background.width,
+      this.xPosition % this.background.width,
       this.xPosition % this.background.width - this.background.width,
       this.xPosition % this.background.width - 2*this.background.width];
-    const yArray = [this.yPosition % this.background.height,
+    const yArray = [this.yPosition % this.background.height + this.background.height,
+      this.yPosition % this.background.height,
       this.yPosition % this.background.height - this.background.height,
       this.yPosition % this.background.height - 2*this.background.height];
     for (let x of xArray) {

@@ -20,7 +20,6 @@ class Game {
     this.score = 0;
     this.startTime = new Date();
     this.frameTimer = 0;
-    this.startMenuLoopTimer
 
     // Set main game boolean to false (therefore, go to main menu)
     this.isInPlay = false;
@@ -172,18 +171,20 @@ class Game {
       console.log(this.target.expectedKeys);
 
       // SCORING: If player pressed the target keypresses before snake reached the target, add points
-      console.log(this.score);
       if (this.target.expecting && this.target.success) {
         this.score++;
         this.target.success = false;
       } else {
         // If target keypresses weren't hit in time:
         this.score -= 10;
-        if (this.score < -100) {
+        if (this.score < -50) {
           // Restart game
+          this.isInPlay = false;
+          this.clear();
           this.startMenu();
         }
       }
+      console.log(this.score);
     }
   }
 }

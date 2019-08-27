@@ -85,7 +85,7 @@ class Snake {
     }
   }
 
-  // Snake update function: advance forward, compute new heading, render text
+  // Snake update function: advance forward, compute new heading
   update(dt) {
     // Compute new linear velocity
     this.linearVelocity = this.linearVelocityMultiplier * (1.5 - 0.5*Math.cos(this.distanceToTarget() * Math.PI*2 / this.toTarget));

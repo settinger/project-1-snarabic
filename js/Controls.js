@@ -11,7 +11,6 @@ class Controls {
   // At start menu: Listen for key "A" to start normally
   // Listen for key "X" for demo mode (impossible to lose)
   // Listen for key "T" for teacher mode (ruby letters)
-  // TODO: Listen for key "L" to start with latin letters
   // TODO: Listen for key "M" for Snongol (Snake Mongol) (stretch goal)
   startMenuEventListener(event) {
     if (event.code === "KeyA") {

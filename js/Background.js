@@ -31,7 +31,7 @@ class Background {
     this.yPosition += dt * this.mainMenuScrollSpeed * Math.sin(this.mainMenuScrollAngle/180*Math.PI);
   }
 
-  // Draw function for main menu: render a 3x3 array of tiles and then render the text
+  // Draw function for main menu: render a 4x4 array of tiles and then render the text
   mainMenuDraw() {
     const xArray = [this.xPosition % this.background.width + this.background.width,
       this.xPosition % this.background.width,

@@ -14,8 +14,6 @@ class Game {
     // Set up keyboard controls
     this.controls = new Controls(this);
 
-    // Enter the Start Menu
-    
     // Set up scoring and timing
     this.score = 0;
     this.startTime = new Date();
@@ -55,6 +53,16 @@ class Game {
 
     // Process the large block of Arabic text to get a large list of targets
     this.text = new TextProcessing(this);
+    // Randomize the starting point
+    let startingPointFound = false
+    while (!startingPointFound) {
+      let startIndex = Math.floor(Math.random() * this.text.text.length);
+      if (this.text.alphabet.includes(this.text.text[startIndex])) {
+        this.text.text = this.text.text.slice(startIndex) + this.text.text.slice(0, startIndex);
+        startingPointFound = true;
+      }
+    }
+    // Create the targets from the text
     this.text.prepTargets();
     
     // Draw background
@@ -86,13 +94,22 @@ class Game {
     this.snake.toTarget = this.snake.distanceToTarget();
 
     // Set text and expected keypresses at first target
-    this.target.text = this.text.targets.shift();
+    let newTargetFound = false;
+    while (!newTargetFound) {
+      this.target.text = this.text.targets.shift();
+      if (this.text.alphabet.includes(this.target.text[1])) {
+        newTargetFound = true;
+      } else {
+        this.snake.stowedText.unshift(this.target.text);
+      }
+    }
     this.target.expectedKeys = this.target.expected(this.target.text);
     this.target.expecting = true; // TODO: set this to false if we're in demo mode
 
     // Set up listener for keypresses
     window.addEventListener('keydown', this.controls.gameListener);
 
+    // begin loop
     this.gameLoop(0);
   }
 
@@ -133,6 +150,7 @@ class Game {
     this.background.draw();
     this.snake.drawText();
     this.target.draw();
+    this.scoreDraw();
   }
 
   gameplayUpdate() {
@@ -168,7 +186,7 @@ class Game {
 
       // Set the expected keypresses for the new target
       this.target.expectedKeys = this.target.expected(this.target.text);
-      console.log(this.target.expectedKeys);
+      //console.log(this.target.expectedKeys);
       this.target.lastWrongKey = 1;
 
       // SCORING: If player pressed the target keypresses before snake reached the target, add points
@@ -177,7 +195,7 @@ class Game {
         this.target.success = false;
       } else if (this.target.expecting) {
         // If target keypresses weren't hit in time:
-        this.score -= 10;
+        this.score -= 3;
         if (this.score < -50) {
           // Restart game
           this.isInPlay = false;
@@ -187,5 +205,14 @@ class Game {
       }
       console.log(this.score);
     }
+  }
+
+  scoreDraw() {
+    this.context.save();
+    this.context.font = "20px sans-serif";
+    this.context.textAlign = "left";
+    this.context.textBaseline = "top"
+    this.context.fillText(`SCORE: ${this.score}`, -this.width/2, -this.height/2);
+    this.context.restore();
   }
 }

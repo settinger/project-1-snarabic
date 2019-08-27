@@ -1,4 +1,7 @@
-class TextProcessing{
+///////////////
+// TextProcessing class to handle turning a block of text (arabic or otherwise) into usable game objects
+
+class TextProcessing {
   constructor(game) {
     this.game = game;
     //this.text = '';
@@ -6,7 +9,7 @@ class TextProcessing{
     this.ZWJ = String.fromCodePoint(0x200D); // Zero-width joiner
     this.ZWS = String.fromCodePoint(0x200B); // Zero-width space (One could alternately use 0x200C, zero-width non-joiner)
 
-    // Sample text to draw from for this verison of the game
+    // Sample text to draw from
     this.text = `أبو القاسم عبيد الله بن عبد الله بن خرداذبة المتوفى في حدود 300 هـ.
 
 مؤرخ وجغرافي في القرن الثالث الهجري. قيل أنه أيراني الأصل وكان معتنقاً دين الزردشتية ثم انتحل دين الإسلام على يد البرامكة ويظهر من ذلك أنه كان من أهل خراسان. اختلف المؤرخون في سنة ولادته ووفاته فذكروا تاريخين لولادته أحدهما 205 والآخر 211 هـ.
@@ -67,7 +70,7 @@ class TextProcessing{
     let prefix, suffix;
     let current = this.text[0];
     let next = this.text[1];
-    // This is the first entry, so the prefix character must be ZWS
+    // This is the first entry, so the prefix character must be zero-width space (ZWS)
     prefix = this.ZWS;
     if (!this.alphabet.includes(current) || !this.alphabet.includes(next)) {
       suffix = this.ZWS;

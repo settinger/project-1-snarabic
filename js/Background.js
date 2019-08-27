@@ -15,6 +15,7 @@ class Background {
     this.mainMenuScrollAngle = 70; // In degrees
   }
 
+  // Draw function for regular gameplay: draw three repeating tiles
   draw() {
     const xArray = [this.xPosition % this.background.width,
       this.xPosition % this.background.width - this.background.width,
@@ -24,11 +25,13 @@ class Background {
     }
   }
 
+  // Update function for main menu: pan up and slightly to the left
   mainMenuUpdate(dt) {
     this.xPosition += dt * this.mainMenuScrollSpeed * Math.cos(this.mainMenuScrollAngle/180*Math.PI);
     this.yPosition += dt * this.mainMenuScrollSpeed * Math.sin(this.mainMenuScrollAngle/180*Math.PI);
   }
 
+  // Draw function for main menu: render a 3x3 array of tiles and then render the text
   mainMenuDraw() {
     const xArray = [this.xPosition % this.background.width,
       this.xPosition % this.background.width - this.background.width,
@@ -52,8 +55,8 @@ class Background {
     this.game.context.font = "30px Merienda";
     this.game.context.fillText("(Snake Arabic)", 0, 20);
     this.game.context.font = "30px serif";
-    //this.game.context.fillText("Press ʼalif to begin", 0, 100);
-    this.game.context.fillText("Press A to begin", 0, 100);
+    this.game.context.fillText("Press ʼalif to begin", 0, 100);
+    // this.game.context.fillText("Press A to begin", 0, 100);
     this.game.context.restore();
   }
 }

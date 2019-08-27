@@ -22,7 +22,8 @@ class Game {
     this.frameTimer = 0;
     this.startMenuLoopTimer
 
-    this.isRunning = false;
+    // Set main game boolean to false (therefore, go to main menu)
+    this.isInPlay = false;
   }
 
   // Start Menu: decorative patterns and a quick explainer of the rules
@@ -38,41 +39,55 @@ class Game {
     let elapsed = (time - this.frameTimer) / 1000; // Time since last frame (in seconds)
     this.mainMenuUpdate(elapsed);
     this.frameTimer = time;
-    if (!this.isRunning) {
+    if (!this.isInPlay) {
       window.requestAnimationFrame(t => this.startMenuLoop(t));
     }
   }
 
   // Start gameplay: reset score, reset timer, reset difficulty, reset drawing
   start() {
-    this.isRunning = true;
+    // Set main game boolean to true
+    this.isInPlay = true;
     // Remove the "Press A to start" Main Menu listener
     window.removeEventListener('keydown', this.controls.mainMenuListener);
 
+    // Process the large block of Arabic text to get a large list of targets
     this.text = new TextProcessing(this);
     this.text.prepTargets();
     
+    // Draw background
     this.background = new Background(this);
 
+    // Instantiate first target
     this.target = new Target(this);
     this.target.xPosition = -200;
     this.target.yPosition = 0;
 
+    // Set up score and timer
     this.score = 0;
     this.startTime = new Date();
     this.frameTimer = 0;
 
+    // I'm unsure if this actually does anything
     this.context.textAlign = 'center';
     this.context.textBaseline = 'middle';
     this.context.font = '40px NotoSansArabicRegular';
+    this.context.save();
 
+    // Instantiate Snake
     this.snake = new Snake(this);
     this.snake.text = [];
+
+    // Start snake with length 1 and position [0, 0, 0]
     this.snake.text.unshift(this.text.targets.shift());
     this.snake.pathPoints.unshift([0,0,0]);
     this.snake.toTarget = this.snake.distanceToTarget();
 
+    // Set text at first target
     this.target.text = this.text.targets.shift();
+
+    // Set up listener for keypresses
+    window.addEventListener('keydown', this.controls.gameListener);
 
     this.gameLoop(0);
   }
@@ -82,7 +97,9 @@ class Game {
     let elapsed = (time - this.frameTimer) / 1000; // Time since last frame (in seconds)
     this.update(elapsed);
     this.frameTimer = time;
-    window.requestAnimationFrame(t => this.gameLoop(t));  // Request next frame
+    if (this.isInPlay) {
+      window.requestAnimationFrame(t => this.gameLoop(t));  // Request next frame
+    }
   }
 
   // Update game: compute how far things should have moved since the last frame, draw them

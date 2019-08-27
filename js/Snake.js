@@ -1,5 +1,6 @@
 ///////////////
 // Snake class for determining the behavior of the snakey text
+
 class Snake {
   constructor(game) {
     this.game = game;
@@ -11,15 +12,16 @@ class Snake {
     this.linearVelocity = 0; // Measured in pixels per second
     this.linearVelocityMultiplier = 75;
     this.rotationalVelocity = 0; // Measured in radians per second
-    this.rotationalVelocityMultiplier = 1.5;
+    this.initialRotationalVelocityMultiplier = 1.5;
+    this.rotationalVelocityMultiplier = this.initialRotationalVelocityMultiplier;
 
     // Textpath properties
-    this.text = [];
-    this.stowedText = [];
+    this.text = []; // The snake's body
+    this.stowedText = []; // Non-target text (e.g. spaces, punctuation, numbers) that will be added to the snake after the current target is reached
     this.pathPoints = []; // Every point in this array should be of the form [x, y, heading]
 
     // Target properties
-    this.toTarget = 0;
+    this.toTarget = 0; // Distance to target when target was spawned (used to calculate speed)
   }
 
   // Function to compute distance between two points
@@ -31,7 +33,6 @@ class Snake {
   distanceToTarget() {
     let target = [this.game.target.xPosition, this.game.target.yPosition];
     return this.dist(target, [this.xPosition, this.yPosition]);
-//    return Math.sqrt((this.xPosition - targetX)**2 + (this.yPosition - targetY)**2);
   }
 
   // Function to determine if snake is at the target
@@ -53,7 +54,7 @@ class Snake {
     ctx.restore();
   }
 
-  // Function to draw a string along the path
+  // Function to draw an array of characters along the snake's path
   drawText() {
     let i = 0;
     let j = 0;
@@ -79,7 +80,7 @@ class Snake {
       while (dx<charWidth && j<this.pathPoints.length-1) {
         dx += this.dist(this.pathPoints[j], this.pathPoints[++j]);
       }
-      // Explanation of the above: After that while loop runs, pathpoints[j-1] should be the position of the next character
+      // Explanation of the above: After the while loop, pathpoints[j-1] should be the position of the next character
       i = j-1;
     }
   }
@@ -119,10 +120,13 @@ class Snake {
     this.game.target.xPosition -= offset;
     this.pathPoints = this.pathPoints.map(x => [x[0] - offset, x[1], x[2]]);
 
+    // Performance improvement: discard path points that are more than 2 screenwidths off-screen
+    this.pathPoints = this.pathPoints.filter(p => p[0] < this.game.width*2);
+
     // If snake is at target:
     if (this.atTarget()) {
       // Reset rotational velocity multiplier
-      this.rotationalVelocityMultiplier = 1.5;
+      this.rotationalVelocityMultiplier = this.initialRotationalVelocityMultiplier;
 
       // Check if any text was stowed; add stowed text to snake.text
       while (this.stowedText.length > 0) {
@@ -142,6 +146,10 @@ class Snake {
           this.stowedText.unshift(this.game.target.text);
         }
       }
+
+      // Update expected keypresses for target, reset target.expected and target.success
+      this.game.target.success = false;
+      this.game.target.expected = this.game.target.expected(this.game.target.text);
 
       // Calculate next target's position
       let randomY = this.game.height*Math.random() - this.game.height/2

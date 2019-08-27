@@ -149,7 +149,8 @@ class Snake {
 
       // Update expected keypresses for target, reset target.expected and target.success
       this.game.target.success = false;
-      this.game.target.expected = this.game.target.expected(this.game.target.text);
+      this.game.target.expectedKeys = this.game.target.expected(this.game.target.text);
+      console.log(this.game.target.expectedKeys);
 
       // Calculate next target's position
       let randomY = this.game.height*Math.random() - this.game.height/2

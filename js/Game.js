@@ -83,8 +83,10 @@ class Game {
     this.snake.pathPoints.unshift([0,0,0]);
     this.snake.toTarget = this.snake.distanceToTarget();
 
-    // Set text at first target
+    // Set text and expected keypresses at first target
     this.target.text = this.text.targets.shift();
+    this.target.expectedKeys = this.target.expected(this.target.text);
+    this.target.expecting = true; // TODO: set this to false if we're in demo mode
 
     // Set up listener for keypresses
     window.addEventListener('keydown', this.controls.gameListener);

@@ -8,7 +8,8 @@ class Target {
     this.yPosition = 0;
     this.dx = 0; // dx is only used for shaking the target left-right when wrong key is pressed
     this.text = ''; // The characters rendered inside the target circle
-    this.expected = [] // The keypress(es) expected by game listener
+    this.expecting = false; // Whether or not the game is expecting keypresses
+    this.expectedKeys = [] // The keypress(es) expected by game listener
     this.success = false; // True if user has pressed the right keys before snake reaches target
     this.lastWrongKey = 1; // Time since last wrong keypress was recorded (used to shake screen)
   }

@@ -20,8 +20,25 @@ class Controls {
 
   // Within game: listen for keys A-Z and '
   gameEventListener(event, game) {
-    if ((event.which >= 65 && event.which <= 90) || [188, 190, 192, 222].includes(event.which)) {
-      // Check if event.key matches what's expected by game.target
+    // Only process keypresses if the game is in a mode that expects keypresses
+    if (game.target.expecting && !game.target.success) {
+      if ((event.which >= 65 && event.which <= 90) || [188, 190, 192, 222].includes(event.which)) {
+        // Check if event.key matches what's expected by game.target
+        // If it is: remove that key from game.target.expectedKeys; if there are no more expectedKeys, report success
+        // If it isn't: reset game.target.expectedKeys; update when last wrongKey was pressed
+        if (event.key === game.target.expectedKeys[0]) {
+          game.target.expectedKeys.shift();
+          console.log('Key worked')
+          if (game.target.expectedKeys.length === 0) {
+            game.target.success = true;
+            console.log('Target hit')
+          }
+        } else {
+          game.target.expectedKeys = game.target.expected(game.target.text);
+          game.target.lastWrongKey = 0;
+          console.log(`target missed; expected ${game.target.expectedKeys[0]} but received ${event.key}`)
+        }
+      }
     }
   }
 }

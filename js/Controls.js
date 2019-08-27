@@ -26,17 +26,14 @@ class Controls {
         // Check if event.key matches what's expected by game.target
         // If it is: remove that key from game.target.expectedKeys; if there are no more expectedKeys, report success
         // If it isn't: reset game.target.expectedKeys; update when last wrongKey was pressed
-        if (event.key === game.target.expectedKeys[0]) {
+        if (event.key.toLowerCase() === game.target.expectedKeys[0]) {
           game.target.expectedKeys.shift();
-          console.log('Key worked')
           if (game.target.expectedKeys.length === 0) {
             game.target.success = true;
-            console.log('Target hit')
           }
         } else {
           game.target.expectedKeys = game.target.expected(game.target.text);
           game.target.lastWrongKey = 0;
-          console.log(`target missed; expected ${game.target.expectedKeys[0]} but received ${event.key}`)
         }
       }
     }

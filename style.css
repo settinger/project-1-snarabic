@@ -4,6 +4,12 @@
 }
 
 @font-face {
+  font-family: "NotoSansMongolianRegular";
+  src: url('assets/NotoSansMongolian-Regular.ttf');
+}
+
+
+@font-face {
   font-family: "Merienda";
   src: url('assets/Merienda-Regular.ttf');
 }
@@ -19,4 +25,13 @@ body {
 
 canvas {
   background-color: white;
+  transition-property: height, width;
+  transition-duration: 1s;
+  transition-timing-function: ease;
+  border: 1px solid red;
+}
+
+.vertical {
+  height: 720;
+  width: 240;
 }

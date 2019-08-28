@@ -35,7 +35,7 @@ class Target {
     if (this.success) {
       ctx.strokeStyle = 'green';
       ctx.fillStyle = 'green';
-    } else if (0 < this.lastWrongKey && this.lastWrongKey <= .75) {
+    } else if (0 < this.lastWrongKey && this.lastWrongKey <= .4) {
       ctx.strokeStyle = 'red';
       ctx.fillStyle = 'red';
     } else {
@@ -65,6 +65,7 @@ class Target {
   }
 
   // Return an array of keypresses expected when a particular character is the target
+  // TODO: Come up with a way to accept multiple answers per character (e.g. ' or ` for the letter 'ayn; j or dj or dz for the letter jim)
   expected(string) {
     let character = string[1]; // Ignore the zero-width characters on either end of the target string
     switch (character) {

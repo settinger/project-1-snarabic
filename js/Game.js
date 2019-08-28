@@ -153,6 +153,7 @@ class Game {
     this.scoreDraw();
   }
 
+  // Gameplay update function: What to do when snake reaches a target
   gameplayUpdate() {
     // If snake is at target:
     if (this.snake.atTarget()) {
@@ -203,10 +204,11 @@ class Game {
           this.startMenu();
         }
       }
-      console.log(this.score);
+      // console.log(this.score);
     }
   }
 
+  // Draw current score in upper-left corner
   scoreDraw() {
     this.context.save();
     this.context.font = "20px sans-serif";

@@ -31,8 +31,7 @@ class Snake {
 
   // Function to quickly get linear distance to target:
   distanceToTarget() {
-    let target = [this.game.target.xPosition, this.game.target.yPosition];
-    return this.dist(target, [this.xPosition, this.yPosition]);
+    return this.dist([this.game.target.xPosition, this.game.target.yPosition], [this.xPosition, this.yPosition]);
   }
 
   // Function to determine if snake is at the target
@@ -74,7 +73,7 @@ class Snake {
       // Get the width of the character
       let txtMeasure = this.game.context.measureText(char);
       let charWidth = txtMeasure.width;
-      // Find a point on the path that's approx charWidth away from current point
+      // Find a point on the path that's approx. charWidth away from current point
       j = i;
       dx = 0;
       while (dx<charWidth && j<this.pathPoints.length-1) {

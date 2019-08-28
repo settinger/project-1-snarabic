@@ -156,7 +156,7 @@ class Game {
     this.background.draw();
     this.snake.drawText();
     this.target.draw();
-    this.scoreDraw();
+    if (this.target.expecting) {this.scoreDraw();}
   }
 
   // Gameplay update function: What to do when snake reaches a target

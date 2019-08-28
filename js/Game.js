@@ -21,6 +21,10 @@ class Game {
 
     // Set main game boolean to false (therefore, go to main menu)
     this.isInPlay = false;
+
+    // Set up sound effects
+    this.goodSound = new Audio('/assets/good.wav');
+    this.badSound = new Audio('/assets/bad.wav');
   }
 
   // Start Menu: decorative patterns and a quick explainer of the rules
@@ -193,10 +197,12 @@ class Game {
       // SCORING: If player pressed the target keypresses before snake reached the target, add points
       if (this.target.expecting && this.target.success) {
         this.score++;
+        this.goodSound.play();
         this.target.success = false;
       } else if (this.target.expecting) {
         // If target keypresses weren't hit in time:
         this.score -= 3;
+        this.badSound.play();
         if (this.score < -50) {
           // Restart game
           this.isInPlay = false;

@@ -120,10 +120,10 @@ class Snongol {
     let newAngle = Math.atan2(dY, dX) - this.snake.angle;
 
     // If we're on the left half of the screen (positive Y), turn clockwise
-    if (this.snake.yPosition < -120) {
+    if (this.snake.yPosition < -20) {
       // If newAngle is significantly anti-clockwise, unwrap it
       while (newAngle < -0.1) { newAngle += 2*Math.PI; }
-    } else if (this.snake.yPosition > 120) {
+    } else if (this.snake.yPosition > 20) {
       // If newAngle is significantly clockwise, unwrap it
       while (newAngle > 0.1) { newAngle -= 2*Math.PI; }
     }

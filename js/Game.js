@@ -120,6 +120,8 @@ class Game {
   // Main game loop: Check time between frames, update game mechanics
   gameLoop(time) {
     let elapsed = (time - this.frameTimer) / 1000; // Time since last frame (in seconds)
+    // Clamp the update time -- If time between frames is greater than 60 ms, assume it was because the screen lost focus
+    if (elapsed > 0.06) {elapsed = 0.02;}
     this.update(elapsed);
     this.frameTimer = time;
     if (this.isInPlay) {

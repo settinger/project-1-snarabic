@@ -65,15 +65,15 @@ class Snongol {
     this.game.text.text = this.game.text.text.slice(startIndex) + this.game.text.text.slice(0, startIndex);
     
     // Create the targets from the text
-    this.game.text.targets = [];
-    for (let char of [...this.game.text.text]) {
-      this.game.targets.push(this.game.text.ZWS + char + this.game.text.ZWS)
-    }
+    this.game.text.targets = [...this.game.text.text];
+    // for (let char of [...this.game.text.text]) {
+    //   this.game.targets.push(char)
+    // }
     
     // Draw background?
     
     // Instantiate first target
-    this.game.target = new Target(this);
+    this.game.target = new Target(this.game);
     this.game.target.xPosition = -200;
     this.game.target.yPosition = 0;
     this.game.target.expecting = false;
@@ -85,13 +85,13 @@ class Snongol {
     this.game.frameTimer = 0;
     
     // Instantiate Snake
-    this.snake = new Snake(this);
+    this.snake = new Snake(this.game);
     this.snake.text = [];
 
     // Start snake with length 1 and position [0, 0, 0]
     this.snake.text.unshift(this.game.text.targets.shift());
     this.snake.pathPoints.unshift([0,0,0]);
-    this.snake.toTarget = this.snake.distanceToTarget();
+    this.snake.toTarget = this.snake.dist([this.game.target.xPosition, this.game.target.yPosition], [this.snake.xPosition, this.snake.yPosition]);
 
     // Set text and expected keypresses at first target
     this.game.target.text = this.game.text.targets.shift();
@@ -101,21 +101,110 @@ class Snongol {
   }
 
   gameLoop(time) {
-    let elapsed = (time - this.frameTimer) / 1000; // Time since last frame (in seconds)
+    let elapsed = (time - this.game.frameTimer) / 1000; // Time since last frame (in seconds)
+    // console.log(`Snake angle (snangle) is ${this.snake.angle}`)
     this.update(elapsed);
-    this.frameTimer = time;
-    if (this.isInPlay && this.vertical) {
+    this.game.frameTimer = time;
+    if (this.game.isInPlay && this.game.vertical) {
       window.requestAnimationFrame(t => this.gameLoop(t));  // Request next frame
     }
   }
 
   update(dt) {
     /////////////////// Update snake with Mongol rules
+    // Update linear velocity
+    this.snake.linearVelocity = this.snake.linearVelocityMultiplier * (1.5 - 0.5*Math.cos(Math.PI*2 / this.snake.toTarget * this.snake.dist([this.game.target.xPosition, this.game.target.yPosition], [this.snake.xPosition, this.snake.yPosition])));
+    // Compute new rotational velocity
+    let dX = this.game.target.xPosition - this.snake.xPosition;
+    let dY = this.game.target.yPosition - this.snake.yPosition;
+    let newAngle = Math.atan2(dY, dX) - this.snake.angle;
+
+    // If we're on the left half of the screen (positive Y), turn clockwise
+    if (this.snake.yPosition < -120) {
+      // If newAngle is significantly anti-clockwise, unwrap it
+      while (newAngle < -0.1) { newAngle += 2*Math.PI; }
+    } else if (this.snake.yPosition > 120) {
+      // If newAngle is significantly clockwise, unwrap it
+      while (newAngle > 0.1) { newAngle -= 2*Math.PI; }
+    }
+    this.snake.rotationalVelocity = newAngle * this.snake.rotationalVelocityMultiplier;
+    // Very slightly increase rotationalvelocitymultiplier as time goes on, to prevent infinite orbits
+    this.snake.rotationalVelocityMultiplier += 0.5*dt;
+
+    // Advance snake a certain distance
+    let dx = Math.cos(this.snake.angle) * this.snake.linearVelocity * dt;
+    let dy = Math.sin(this.snake.angle) * this.snake.linearVelocity * dt;
+    let dw = this.snake.rotationalVelocity * dt;
+    this.snake.xPosition += dx;
+    this.snake.yPosition += dy;
+    this.snake.angle += dw;
+    // Wrap this.angle so it stays in range [0, 2*pi)
+    while (this.snake.angle >= 2*Math.PI) {this.snake.angle -= 2*Math.PI;}
+    
+    // Update array of pathPoints
+    this.snake.pathPoints.unshift([this.snake.xPosition, this.snake.yPosition, this.snake.angle]);
+
+    // Subtract this.xPosition from target and pathPoints x positions (so snake stays fixed in the center of the screen)
+    let offset = this.snake.xPosition;
+    this.snake.xPosition -= offset;
+    // this.game.background.xPosition -= offset/this.game.background.parallax;
+    this.game.target.xPosition -= offset;
+    this.snake.pathPoints = this.snake.pathPoints.map(x => [x[0] - offset, x[1], x[2]]);
+
+
+    // If snake is at target:
+    if (10 > this.snake.dist([this.game.target.xPosition, this.game.target.yPosition], [this.snake.xPosition, this.snake.yPosition])) {
+      this.snake.text.unshift(this.game.target.text);
+      // Calculate next target's position
+      let randomY = this.game.width*Math.random() - this.game.width/2;
+      randomY *= 0.8 // Don't let the target get too close to the top/bottom of the screen
+      this.game.target.xPosition = -200
+      this.game.target.yPosition = randomY;
+      this.snake.toTarget = 200;
+
+      // Reset snake's rotational velocity multiplier
+      this.snake.rotationalVelocityMultiplier = this.snake.initialRotationalVelocityMultiplier;
+
+      // Update text on next target
+      this.game.target.text = this.game.text.targets.shift();
+    }
 
     this.clear();
     // draw snake
+    this.drawText();
     // draw target
-    // draw score?
+    this.snake.rotatedChar(this.game.target.text, 180, this.game.target.xPosition, this.game.target.yPosition)
+  }
+
+  // Function to draw an array of characters along the snake's path
+  drawText() {
+    let i = 0;
+    let j = 0;
+    let dx = 0;
+    this.game.context.font = '40px NotoSansMongolianRegular';
+    for (let char of [...this.snake.text]) {
+      // Draw character using [x,y,heading] at this.pathPoints[i]
+      let angle = this.snake.pathPoints[i][2]*180/Math.PI;
+      let x = this.snake.pathPoints[i][0];
+      let y = this.snake.pathPoints[i][1];
+      this.snake.rotatedChar(char, angle, x, y);
+      // Speed boost: stop rendering characters when they go off the screen
+      if (x > (this.game.height/2)*1.1) {
+        break;
+      }
+      
+      // Get the width of the character
+      let txtMeasure = this.game.context.measureText(char);
+      let charWidth = txtMeasure.width;
+      // Find a point on the path that's approx. charWidth away from current point
+      j = i;
+      dx = 0;
+      while (dx<charWidth && j<this.snake.pathPoints.length-1) {
+        dx += this.snake.dist(this.snake.pathPoints[j], this.snake.pathPoints[++j]);
+      }
+      // Explanation of the above: After the while loop, pathpoints[j-1] should be the position of the next character
+      i = j-1;
+    }
   }
 
 }

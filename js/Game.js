@@ -225,7 +225,7 @@ class Game {
       }
       
       // SPEED UPDATE: Move faster as score increases
-      this.snake.linearVelocityMultiplier = Math.max(75 + 2*this.score, 60);
+      this.snake.linearVelocityMultiplier = 55 + 2*this.score;
       this.snake.initialRotationalVelocityMultiplier = 1.5 * this.snake.linearVelocityMultiplier/75;
       // console.log(`Speed: ${this.snake.linearVelocityMultiplier.toFixed(0)}`);
     }

@@ -221,7 +221,6 @@ class Game {
             this.startMenu();
           });
           this.deathSound.play();
-          
         }
       }
       

@@ -22,10 +22,12 @@ class Game {
     // Set main game boolean to false (therefore, go to main menu)
     this.isInPlay = false;
     this.vertical = false;
+    this.gameOver = false;
 
     // Set up sound effects
     this.goodSound = new Audio('/assets/good.wav');
     this.badSound = new Audio('/assets/bad.wav');
+    this.deathSound = new Audio('/assets/smb_mariodie.wav');
   }
 
   // Start Menu: decorative patterns and a quick explainer of the rules
@@ -163,7 +165,7 @@ class Game {
   // Gameplay update function: What to do when snake reaches a target
   gameplayUpdate() {
     // If snake is at target:
-    if (this.snake.atTarget()) {
+    if (this.snake.atTarget() && !this.gameOver) {
       // Calculate next target's position
       let randomY = this.height*Math.random() - this.height/2;
       randomY *= 0.8 // Don't let the target get too close to the top/bottom of the screen
@@ -206,18 +208,27 @@ class Game {
         // If target keypresses weren't hit in time:
         this.score -= 3;
         this.badSound.play();
+        // If score goes too low: Make snake flop off screen, play Mario death sound effect
         if (this.score < -20) {
           // Restart game
-          this.isInPlay = false;
-          this.clear();
-          this.startMenu();
+          // this.isInPlay = false;
+          this.gameOver = true;
+          this.target.setPosition(50, 1000);
+          this.deathSound.addEventListener('ended', () => {
+            this.isInPlay = false;
+            this.gameOver = false;
+            this.clear();
+            this.startMenu();
+          });
+          this.deathSound.play();
+          
         }
       }
       
       // SPEED UPDATE: Move faster as score increases
-      this.snake.linearVelocityMultiplier = 75 + 2*this.score;
+      this.snake.linearVelocityMultiplier = Math.max(75 + 2*this.score, 60);
       this.snake.initialRotationalVelocityMultiplier = 1.5 * this.snake.linearVelocityMultiplier/75;
-      console.log(`Speed: ${this.snake.linearVelocityMultiplier.toFixed(0)}`);
+      // console.log(`Speed: ${this.snake.linearVelocityMultiplier.toFixed(0)}`);
     }
   }
 

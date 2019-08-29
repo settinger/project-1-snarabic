@@ -88,6 +88,7 @@ class Snake {
   update(dt) {
     // Compute new linear velocity
     this.linearVelocity = this.linearVelocityMultiplier * (1.5 - 0.5*Math.cos(this.distanceToTarget() * Math.PI*2 / this.toTarget));
+    if (this.game.gameOver) {this.linearVelocity = 200;}
     
     // Compute new rotational velocity
     let dX = this.game.target.xPosition - this.xPosition;

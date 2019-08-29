@@ -22,6 +22,10 @@ class Game {
     // Set main game boolean to false (therefore, go to main menu)
     this.isInPlay = false;
     this.vertical = false;
+
+    // Set up sound effects
+    this.goodSound = new Audio('/assets/good.wav');
+    this.badSound = new Audio('/assets/bad.wav');
   }
 
   // Start Menu: decorative patterns and a quick explainer of the rules
@@ -117,6 +121,8 @@ class Game {
   // Main game loop: Check time between frames, update game mechanics
   gameLoop(time) {
     let elapsed = (time - this.frameTimer) / 1000; // Time since last frame (in seconds)
+    // Clamp the update time -- If time between frames is greater than 60 ms, assume it was because the screen lost focus
+    if (elapsed > 0.06) {elapsed = 0.02;}
     this.update(elapsed);
     this.frameTimer = time;
     if (this.isInPlay && !this.vertical) {
@@ -151,7 +157,7 @@ class Game {
     this.background.draw();
     this.snake.drawText();
     this.target.draw();
-    this.scoreDraw();
+    if (this.target.expecting) {this.scoreDraw();}
   }
 
   // Gameplay update function: What to do when snake reaches a target
@@ -194,10 +200,12 @@ class Game {
       // SCORING: If player pressed the target keypresses before snake reached the target, add points
       if (this.target.expecting && this.target.success) {
         this.score++;
+        this.goodSound.play();
         this.target.success = false;
       } else if (this.target.expecting) {
         // If target keypresses weren't hit in time:
         this.score -= 3;
+        this.badSound.play();
         if (this.score < -50) {
           // Restart game
           this.isInPlay = false;
@@ -205,7 +213,11 @@ class Game {
           this.startMenu();
         }
       }
-      // console.log(this.score);
+      
+      // SPEED UPDATE: Move faster as score increases
+      this.snake.linearVelocityMultiplier = 75 + 2*this.score;
+      this.snake.initialRotationalVelocityMultiplier = 1.5 * this.snake.linearVelocityMultiplier/75;
+      console.log(`Speed: ${this.snake.linearVelocityMultiplier.toFixed(0)}`);
     }
   }
 

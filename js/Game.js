@@ -245,8 +245,8 @@ class Game {
 
   snongol() {
     // Re-intialize canvas properties
-    this.width = this.canvas.width;
-    this.height = this.canvas.height;
+    // this.width = this.canvas.width;
+    // this.height = this.canvas.height;
     this.context = this.canvas.getContext('2d');
     this.context.resetTransform();
     this.context.translate(this.width/2, this.height/2); // Set origin to center of canvas

@@ -24,7 +24,6 @@ class Controls {
     } else if (event.code === "KeyM") {
       this.game.vertical = true;
       this.game.canvas.classList.add('vertical');
-      console.dir(this.game.canvas);
       this.game.snongol();
     }
   }

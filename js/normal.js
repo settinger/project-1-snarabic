@@ -6,6 +6,7 @@ class Snongol {
     this.game = game;
     this.game.target = new Target(this.game);
     this.game.text = new TextProcessing(this.game);
+    this.backgroundOffset = 0;
   }
 
   mainMenu() {
@@ -92,7 +93,7 @@ class Snongol {
     // Start snake with length 1 and position [0, 0, 0]
     this.snake.text.push(this.game.text.targets.shift());
     this.snake.pathPoints.unshift([0,0,0]);
-    this.snake.toTarget = this.snake.dist([this.game.target.xPosition, this.game.target.yPosition], [this.snake.xPosition, this.snake.yPosition]);
+    this.snake.toTarget = 200;
 
     // Set text and expected keypresses at first target
     this.game.target.text = this.game.text.targets.shift();
@@ -153,6 +154,7 @@ class Snongol {
     // Subtract this.xPosition from target and pathPoints x positions (so snake stays fixed in the center of the screen)
     let offset = this.snake.xPosition;
     this.snake.xPosition -= offset;
+    this.backgroundOffset -= offset/2;
     // this.game.background.xPosition -= offset/this.game.background.parallax;
     this.game.target.xPosition -= offset;
     this.snake.pathPoints = this.snake.pathPoints.map(x => [x[0] - offset, x[1], x[2]]);
@@ -176,10 +178,16 @@ class Snongol {
     }
 
     this.clear();
+    // draw background
+    this.mongolBackground();
     // draw snake
     this.drawText();
     // draw target
     this.snake.rotatedChar(this.game.target.text, 180, this.game.target.xPosition, this.game.target.yPosition)
+    this.game.context.beginPath()
+    this.game.context.arc(this.game.target.xPosition, this.game.target.yPosition, 30, 0, 2*Math.PI);
+    this.game.context.stroke();
+    this.game.context.closePath();
   }
 
   // Function to draw an array of characters along the snake's path
@@ -214,4 +222,17 @@ class Snongol {
     // }
   }
 
+  mongolBackground() {
+    let lineSpacing = 40;
+    this.backgroundOffset = (lineSpacing + this.backgroundOffset) % lineSpacing;
+    this.game.context.save();
+    this.game.context.beginPath();
+    for (let x=-this.game.height+this.backgroundOffset; x<this.game.height; x += lineSpacing) {
+      this.game.context.moveTo(x, -this.game.width/2);
+      this.game.context.lineTo(x-lineSpacing, this.game.width/2);
+    }
+    this.game.context.stroke();
+    this.game.context.closePath();
+    this.game.context.restore();
+  }
 }

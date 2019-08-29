@@ -75,7 +75,7 @@ class Snongol {
     
     // Instantiate first target
     this.game.target = new Target(this.game);
-    this.game.target.xPosition = -200;
+    this.game.target.xPosition = -10;
     this.game.target.yPosition = 0;
     this.game.target.expecting = false;
 

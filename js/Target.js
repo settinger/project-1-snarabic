@@ -51,7 +51,7 @@ class Target {
     
     if (this.teacher) {
       ctx.font = '20px serif';
-      ctx.fillText(this.expectedKeys.join(''), this.xPosition+20, this.yPosition-20);
+      ctx.fillText(this.expectedKeys.join(''), this.xPosition-20, this.yPosition-20);
     }
 
     ctx.restore();

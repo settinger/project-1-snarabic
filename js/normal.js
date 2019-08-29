@@ -30,6 +30,12 @@ class Snongol {
     let elapsed = (time - this.game.frameTimer) / 1000; // Time since last frame (in seconds)
     this.mainMenuUpdate(elapsed);
     this.game.frameTimer = time;
+    
+    this.game.width = this.game.canvas.clientWidth;
+    this.game.canvas.width = this.game.width;
+    this.game.height = this.game.canvas.clientheight;
+    this.game.canvas.height = this.game.height;
+    console.log(`Dimensions: ${this.game.canvas.clientWidth} wide and ${this.game.canvas.clientHeight} high`)
 
     // If we've been on the start menu for six seconds, automatically enter Mongol gameplay mode
     this.menuTimer += elapsed;

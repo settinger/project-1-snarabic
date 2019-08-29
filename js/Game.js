@@ -5,8 +5,10 @@ class Game {
   constructor(canvas) {
     // First, set up the canvas and context
     this.canvas = canvas;
-    this.width = this.canvas.width;
-    this.height = this.canvas.height;
+    this.width = this.canvas.clientWidth;
+    this.canvas.width = this.width;
+    this.height = this.canvas.clientHeight;
+    this.canvas.height = this.height;
     this.context = this.canvas.getContext('2d');
     this.context.resetTransform();
     this.context.translate(this.width/2, this.height/2); // Set origin to center of canvas

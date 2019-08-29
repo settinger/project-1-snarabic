@@ -30,11 +30,11 @@ canvas {
   transition-property: height, width;
   transition-duration: 1s;
   transition-timing-function: ease;
-  width: 720px;
-  height: 240px;
+  width: 60vw;
+  height: 20vw;
 }
 
 .vertical {
-  height: 720px;
-  width: 240px;
+  height: 75vh;
+  width: 25vh;
 }

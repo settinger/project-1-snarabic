@@ -23,9 +23,8 @@ class Controls {
       this.game.target.teacher = true;
     } else if (event.code === "KeyM") {
       this.game.vertical = true;
-      this.game.canvas.height = 720;
-      this.game.canvas.width = 240;
       this.game.canvas.classList.add('vertical');
+      console.dir(this.game.canvas);
       this.game.snongol();
     }
   }

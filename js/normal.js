@@ -66,7 +66,7 @@ class Snongol {
     
     // Create the targets from the text
     this.game.text.targets = [...this.game.text.text];
-    this.game.text.targets.reverse();
+    this.game.text.targets;
     // for (let char of [...this.game.text.text]) {
     //   this.game.targets.push(char)
     // }

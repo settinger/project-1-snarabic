@@ -7,6 +7,11 @@ class Snongol {
     // this.game.target = new Target(this.game);
     this.game.text = new TextProcessing(this.game);
     this.backgroundOffset = 0;
+
+    this.$header = document.querySelector("h1");
+    this.$header.textContent = "SNONGOL??"
+    this.$rules = document.getElementById("rules");
+    this.$rules.innerHTML = `<p>oh no oh geez I don't know anything about Mongolian</p>`;
   }
 
   mainMenu() {

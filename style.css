@@ -28,7 +28,6 @@ canvas {
   transition-property: height, width;
   transition-duration: 1s;
   transition-timing-function: ease;
-  border: 1px solid red;
 }
 
 .vertical {

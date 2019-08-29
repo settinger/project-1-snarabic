@@ -4,7 +4,7 @@
 class Snongol {
   constructor(game) {
     this.game = game;
-    this.game.target = new Target(this.game);
+    // this.game.target = new Target(this.game);
     this.game.text = new TextProcessing(this.game);
     this.backgroundOffset = 0;
   }
@@ -76,8 +76,8 @@ class Snongol {
     
     // Instantiate first target
     this.game.target = new Target(this.game);
-    this.game.target.xPosition = 400;
-    this.game.target.yPosition = 0;
+    this.game.target.xPosition = -200;
+    this.game.target.yPosition = 1;
     this.game.target.expecting = false;
 
     // Set up score and timer
@@ -88,6 +88,8 @@ class Snongol {
     
     // Instantiate Snake
     this.snake = new Snake(this.game);
+    this.snake.xPosition = 0;
+    this.snake.yPosition = 0;
     this.snake.text = [];
 
     // Start snake with length 1 and position [0, 0, 0]
@@ -103,9 +105,10 @@ class Snongol {
   }
 
   gameLoop(time) {
-    let elapsed = (time - this.game.frameTimer) / 1000; // Time since last frame (in seconds)
-    // console.log(`Snake angle (snangle) is ${this.snake.angle}`)
+    let elapsed = (time - this.game.frameTimer) / 1000; // Time since last frame (in seconds))
+    if (elapsed > 0.06) {elapsed = 0.02;}
     this.update(elapsed);
+    this.badDebug++;
     this.game.frameTimer = time;
     if (this.game.isInPlay && this.game.vertical) {
       window.requestAnimationFrame(t => this.gameLoop(t));  // Request next frame
@@ -165,8 +168,8 @@ class Snongol {
       this.snake.text.push(this.game.target.text);
       // Calculate next target's position
       let randomY = this.game.width*Math.random() - this.game.width/2;
-      randomY *= 0.8 // Don't let the target get too close to the top/bottom of the screen
-      this.game.target.xPosition = -200
+      randomY *= 0.8; // Don't let the target get too close to the top/bottom of the screen
+      this.game.target.xPosition = -200;
       this.game.target.yPosition = randomY;
       this.snake.toTarget = 200;
 

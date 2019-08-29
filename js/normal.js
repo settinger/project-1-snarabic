@@ -25,9 +25,9 @@ class Snongol {
     this.mainMenuUpdate(elapsed);
     this.game.frameTimer = time;
 
-    // If we've been on the start menu for five seconds, automatically enter Mongol gameplay mode
+    // If we've been on the start menu for six seconds, automatically enter Mongol gameplay mode
     this.menuTimer += elapsed;
-    if (this.menuTimer >= 5) {
+    if (this.menuTimer >= 6) {
       this.game.isInPlay = true;
       this.start();
     }

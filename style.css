@@ -28,9 +28,11 @@ canvas {
   transition-property: height, width;
   transition-duration: 1s;
   transition-timing-function: ease;
+  width: 720px;
+  height: 240px;
 }
 
 .vertical {
-  height: 720;
-  width: 240;
+  height: 720px;
+  width: 240px;
 }

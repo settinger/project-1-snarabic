@@ -24,7 +24,7 @@ class Controls {
     } else if (event.code === "KeyM") {
       this.game.canvas.height = 720;
       this.game.canvas.width = 240;
-      this.game.canvas.parentElement.classList.add('vertical');
+      this.game.canvas.classList.add('vertical');
       this.game.snongol();
     }
   }

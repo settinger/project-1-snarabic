@@ -66,6 +66,7 @@ class Snongol {
     
     // Create the targets from the text
     this.game.text.targets = [...this.game.text.text];
+    this.game.text.targets.reverse();
     // for (let char of [...this.game.text.text]) {
     //   this.game.targets.push(char)
     // }
@@ -89,7 +90,7 @@ class Snongol {
     this.snake.text = [];
 
     // Start snake with length 1 and position [0, 0, 0]
-    this.snake.text.unshift(this.game.text.targets.shift());
+    this.snake.text.push(this.game.text.targets.shift());
     this.snake.pathPoints.unshift([0,0,0]);
     this.snake.toTarget = this.snake.dist([this.game.target.xPosition, this.game.target.yPosition], [this.snake.xPosition, this.snake.yPosition]);
 
@@ -119,14 +120,19 @@ class Snongol {
     let dY = this.game.target.yPosition - this.snake.yPosition;
     let newAngle = Math.atan2(dY, dX) - this.snake.angle;
 
-    // If we're on the left half of the screen (positive Y), turn clockwise
-    if (this.snake.yPosition < -20) {
+    // If y is very negative, make it rotate clockwise
+    // if y is very positive, make it rotate anticlockwise
+    // Else; ensure it's in the range (-pi, pi]
+    if (this.snake.yPosition < -30) {
       // If newAngle is significantly anti-clockwise, unwrap it
       while (newAngle < -0.1) { newAngle += 2*Math.PI; }
-    } else if (this.snake.yPosition > 20) {
-      // If newAngle is significantly clockwise, unwrap it
+    } else if (this.snake.yPosition > 30) {
       while (newAngle > 0.1) { newAngle -= 2*Math.PI; }
+    } else {
+      while (newAngle <= -Math.PI) { newAngle += 2*Math.PI; }
+      while (newAngle > Math.PI) { newAngle -= 2*Math.PI; }
     }
+
     this.snake.rotationalVelocity = newAngle * this.snake.rotationalVelocityMultiplier;
     // Very slightly increase rotationalvelocitymultiplier as time goes on, to prevent infinite orbits
     this.snake.rotationalVelocityMultiplier += 0.5*dt;
@@ -154,7 +160,7 @@ class Snongol {
 
     // If snake is at target:
     if (10 > this.snake.dist([this.game.target.xPosition, this.game.target.yPosition], [this.snake.xPosition, this.snake.yPosition])) {
-      this.snake.text.unshift(this.game.target.text);
+      this.snake.text.push(this.game.target.text);
       // Calculate next target's position
       let randomY = this.game.width*Math.random() - this.game.width/2;
       randomY *= 0.8 // Don't let the target get too close to the top/bottom of the screen
@@ -182,29 +188,30 @@ class Snongol {
     let j = 0;
     let dx = 0;
     this.game.context.font = '40px NotoSansMongolianRegular';
-    for (let char of [...this.snake.text]) {
-      // Draw character using [x,y,heading] at this.pathPoints[i]
-      let angle = this.snake.pathPoints[i][2]*180/Math.PI;
-      let x = this.snake.pathPoints[i][0];
-      let y = this.snake.pathPoints[i][1];
-      this.snake.rotatedChar(char, angle, x, y);
-      // Speed boost: stop rendering characters when they go off the screen
-      if (x > (this.game.height/2)*1.1) {
-        break;
-      }
+    this.snake.rotatedChar(this.snake.text.join(''), this.snake.pathPoints[0][2]*180/Math.PI, this.snake.pathPoints[0][0], this.snake.pathPoints[0][1]);
+    // for (let char of [...this.snake.text]) {
+    //   // Draw character using [x,y,heading] at this.pathPoints[i]
+    //   let angle = this.snake.pathPoints[i][2]*180/Math.PI;
+    //   let x = this.snake.pathPoints[i][0];
+    //   let y = this.snake.pathPoints[i][1];
+    //   this.snake.rotatedChar(char, angle, x, y);
+    //   // Speed boost: stop rendering characters when they go off the screen
+    //   if (x > (this.game.height/2)*1.1) {
+    //     break;
+    //   }
       
-      // Get the width of the character
-      let txtMeasure = this.game.context.measureText(char);
-      let charWidth = txtMeasure.width;
-      // Find a point on the path that's approx. charWidth away from current point
-      j = i;
-      dx = 0;
-      while (dx<charWidth && j<this.snake.pathPoints.length-1) {
-        dx += this.snake.dist(this.snake.pathPoints[j], this.snake.pathPoints[++j]);
-      }
-      // Explanation of the above: After the while loop, pathpoints[j-1] should be the position of the next character
-      i = j-1;
-    }
+    //   // Get the width of the character
+    //   let txtMeasure = this.game.context.measureText(char);
+    //   let charWidth = txtMeasure.width;
+    //   // Find a point on the path that's approx. charWidth away from current point
+    //   j = i;
+    //   dx = 0;
+    //   while (dx<charWidth && j<this.snake.pathPoints.length-1) {
+    //     dx += this.snake.dist(this.snake.pathPoints[j], this.snake.pathPoints[++j]);
+    //   }
+    //   // Explanation of the above: After the while loop, pathpoints[j-1] should be the position of the next character
+    //   i = j-1;
+    // }
   }
 
 }

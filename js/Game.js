@@ -15,7 +15,7 @@ class Game {
     this.controls = new Controls(this);
 
     // Set up scoring and timing
-    this.score = 0;
+    this.score = 10;
     this.startTime = new Date();
     this.frameTimer = 0;
 
@@ -81,7 +81,7 @@ class Game {
     this.target.yPosition = 0;
 
     // Set up score and timer
-    this.score = 0;
+    this.score = 10;
     this.startTime = new Date();
     this.frameTimer = 0;
 
@@ -209,7 +209,7 @@ class Game {
         this.score -= 3;
         this.badSound.play();
         // If score goes too low: Make snake flop off screen, play Mario death sound effect
-        if (this.score < -20) {
+        if (this.score < 0) {
           // Restart game
           // this.isInPlay = false;
           this.gameOver = true;

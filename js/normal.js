@@ -28,8 +28,17 @@ class Snongol {
 
   startMenuLoop(time) {
     let elapsed = (time - this.game.frameTimer) / 1000; // Time since last frame (in seconds)
-    this.mainMenuUpdate(elapsed);
     this.game.frameTimer = time;
+    // console.log(`Dimensions: ${this.game.canvas.clientWidth} wide and ${this.game.canvas.clientHeight} high`)
+    this.game.width = this.game.canvas.clientWidth;
+    this.game.canvas.width = this.game.width;
+    this.game.height = this.game.canvas.clientHeight;
+    this.game.canvas.height = this.game.height;
+    this.game.context.resetTransform();
+    this.game.context.translate(this.game.width/2, this.game.height/2); // Set origin to center of canvas
+    this.game.context.rotate(-Math.PI/2);
+    this.mainMenuUpdate(elapsed);
+    
 
     // If we've been on the start menu for six seconds, automatically enter Mongol gameplay mode
     this.menuTimer += elapsed;

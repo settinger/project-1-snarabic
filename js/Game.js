@@ -21,6 +21,7 @@ class Game {
 
     // Set main game boolean to false (therefore, go to main menu)
     this.isInPlay = false;
+    this.vertical = false;
 
     // Set up sound effects
     this.goodSound = new Audio('/assets/good.wav');
@@ -43,7 +44,7 @@ class Game {
     let elapsed = (time - this.frameTimer) / 1000; // Time since last frame (in seconds)
     this.mainMenuUpdate(elapsed);
     this.frameTimer = time;
-    if (!this.isInPlay) {
+    if (!this.isInPlay && !this.vertical) {
       window.requestAnimationFrame(t => this.startMenuLoop(t));
     }
   }
@@ -108,7 +109,7 @@ class Game {
       }
     }
     this.target.expectedKeys = this.target.expected(this.target.text);
-    this.target.expecting = true; // TODO: set this to false if we're in demo mode
+    this.target.expecting = true; // Later, this gets set to false if we're in demo mode
 
     // Set up listener for keypresses
     window.addEventListener('keydown', this.controls.gameListener);
@@ -124,7 +125,7 @@ class Game {
     if (elapsed > 0.06) {elapsed = 0.02;}
     this.update(elapsed);
     this.frameTimer = time;
-    if (this.isInPlay) {
+    if (this.isInPlay && !this.vertical) {
       window.requestAnimationFrame(t => this.gameLoop(t));  // Request next frame
     }
   }
@@ -228,5 +229,29 @@ class Game {
     this.context.textBaseline = "top"
     this.context.fillText(`SCORE: ${this.score}`, -this.width/2, -this.height/2);
     this.context.restore();
+  }
+
+  snongol() {
+    // Re-intialize canvas properties
+    this.width = this.canvas.width;
+    this.height = this.canvas.height;
+    this.context = this.canvas.getContext('2d');
+    this.context.resetTransform();
+    this.context.translate(this.width/2, this.height/2); // Set origin to center of canvas
+    this.context.rotate(-Math.PI/2);
+
+    // Keyboard controls are already set up
+    // this.controls = new Controls(this);
+
+    // Set up scoring and timing
+    this.score = 0;
+    this.startTime = new Date();
+    this.frameTimer = 0;
+
+    // Set main game boolean to false (therefore, go to main menu)
+    this.isInPlay = false;
+    this.vertical = true;
+    this.snongol = new Snongol(this);
+    this.snongol.mainMenu();
   }
 }

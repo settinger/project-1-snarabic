@@ -206,7 +206,7 @@ class Game {
         // If target keypresses weren't hit in time:
         this.score -= 3;
         this.badSound.play();
-        if (this.score < -50) {
+        if (this.score < -20) {
           // Restart game
           this.isInPlay = false;
           this.clear();

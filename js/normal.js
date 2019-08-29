@@ -123,10 +123,10 @@ class Snongol {
     // If y is very negative, make it rotate clockwise
     // if y is very positive, make it rotate anticlockwise
     // Else; ensure it's in the range (-pi, pi]
-    if (this.snake.yPosition < -30) {
+    if (this.snake.yPosition < -25) {
       // If newAngle is significantly anti-clockwise, unwrap it
       while (newAngle < -0.1) { newAngle += 2*Math.PI; }
-    } else if (this.snake.yPosition > 30) {
+    } else if (this.snake.yPosition > 25) {
       while (newAngle > 0.1) { newAngle -= 2*Math.PI; }
     } else {
       while (newAngle <= -Math.PI) { newAngle += 2*Math.PI; }

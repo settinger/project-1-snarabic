@@ -47,7 +47,7 @@ class Snake {
     ctx.textBaseline = 'middle';
     // ctx.font = '40px NotoSansArabicRegular';
     ctx.font = `${this.game.height/6}px NotoSansArabicRegular`;
-    if (this.game.vertical) {ctx.font = `${this.game.width/6}px NotoSansMongolianRegular`}
+    if (this.game.vertical) {ctx.font = `${this.game.width/6}px serif`}
     ctx.translate(x, y);
     ctx.rotate(Math.PI/180 * angle);
     ctx.translate(-x, -y);

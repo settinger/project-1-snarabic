@@ -18,7 +18,7 @@ class Target {
   // Update function: Only used to calculate this.dx, to shake the target left-right if the wrong key was pressed
   update(dt) {
     if (0 < this.lastWrongKey && this.lastWrongKey <= .4) {
-      this.dx = 20*Math.sin(18*Math.PI*this.lastWrongKey);
+      this.dx = (this.game.width/36)*Math.sin(18*Math.PI*this.lastWrongKey);
     } else {
       this.dx = 0;
     }
@@ -44,14 +44,15 @@ class Target {
     }
     
     ctx.fillText(this.text, this.xPosition+this.dx, this.yPosition);
-    ctx.beginPath()
-    ctx.arc(this.xPosition+this.dx, this.yPosition, 15, 0, 2*Math.PI);
-    ctx.stroke();
-    ctx.closePath();
+    // ctx.beginPath()
+    // ctx.arc(this.xPosition+this.dx, this.yPosition, 15, 0, 2*Math.PI);
+    // ctx.stroke();
+    // ctx.closePath();
     
     if (this.teacher) {
-      ctx.font = '20px serif';
-      ctx.fillText(this.expectedKeys.join(''), this.xPosition-20, this.yPosition-20);
+      // ctx.font = '20px serif';
+      ctx.font = `${this.game.height/12}px serif`
+      ctx.fillText(this.expectedKeys.join(''), this.xPosition-this.game.height/12, this.yPosition-this.game.height/12);
     }
 
     ctx.restore();

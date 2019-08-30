@@ -11,7 +11,7 @@ class Background {
     this.xPosition = 0;
     this.yPosition = 0;
     this.parallax = 2;
-    this.mainMenuScrollSpeed = 40;
+    this.mainMenuScrollSpeed = this.game.height/6;
     this.mainMenuScrollAngle = 70; // In degrees
   }
 
@@ -52,14 +52,15 @@ class Background {
     this.game.context.save()
     this.game.context.textAlign = 'center';
     this.game.context.textBaseline = 'middle';
-    this.game.context.font = '80px Merienda';
-    this.game.context.fillText("SNARABIC", 0, -30);
-    this.game.context.font = "30px Merienda";
-    this.game.context.fillText("(Snake Arabic)", 0, 20);
-    this.game.context.font = "30px serif";
+    // this.game.context.font = '80px Merienda';
+    this.game.context.font = `${this.game.height/3}px Merienda`;
+    this.game.context.fillText("SNARABIC", 0, -this.game.height/8);
+    this.game.context.font = `${this.game.height/8}px Merienda`;;
+    this.game.context.fillText("(Snake Arabic)", 0, this.game.height/12);
+    // this.game.context.font = `${this.game.height/8}px Serif`;;
     // this.game.context.fillText("Press ʼalif [A] to begin", 0, 100);
-    this.game.context.font = "21px serif";
-    this.game.context.fillText("Press [A] for normal game, [T] for teacher, [X] for demo mode", 0, 100);
+    this.game.context.font = `${this.game.height/240*21}px Serif`;
+    this.game.context.fillText("Press [A] for normal game, [T] for teacher, [X] for demo mode", 0, this.game.height/2.4);
     this.game.context.restore();
   }
 }

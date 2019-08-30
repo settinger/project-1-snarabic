@@ -36,7 +36,7 @@ class Snake {
 
   // Function to determine if snake is at the target
   atTarget() {
-    return this.distanceToTarget() < 10;
+    return this.distanceToTarget() < this.game.width/72;
   }
 
   // Function to draw a single rotated character at position (x, y)
@@ -45,7 +45,9 @@ class Snake {
     ctx.save();
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.font = '40px NotoSansArabicRegular';
+    // ctx.font = '40px NotoSansArabicRegular';
+    ctx.font = `${this.game.height/6}px NotoSansArabicRegular`;
+    if (this.game.vertical) {ctx.font = `${this.game.width/6}px NotoSansMongolianRegular`}
     ctx.translate(x, y);
     ctx.rotate(Math.PI/180 * angle);
     ctx.translate(-x, -y);
@@ -58,7 +60,7 @@ class Snake {
     let i = 0;
     let j = 0;
     let dx = 0;
-    this.game.context.font = '40px NotoSansArabicRegular';
+    this.game.context.font = `${this.game.height/6}px NotoSansArabicRegular`;
     for (let char of [...this.text]) {
       // Draw character using [x,y,heading] at this.pathPoints[i]
       let angle = this.pathPoints[i][2]*180/Math.PI + 180;
@@ -88,7 +90,7 @@ class Snake {
   update(dt) {
     // Compute new linear velocity
     this.linearVelocity = this.linearVelocityMultiplier * (1.5 - 0.5*Math.cos(this.distanceToTarget() * Math.PI*2 / this.toTarget));
-    if (this.game.gameOver) {this.linearVelocity = 200;}
+    if (this.game.gameOver) {this.linearVelocity = this.game.height;}
     
     // Compute new rotational velocity
     let dX = this.game.target.xPosition - this.xPosition;

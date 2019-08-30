@@ -79,7 +79,7 @@ class Game {
 
     // Instantiate first target
     this.target = new Target(this);
-    this.target.xPosition = -200;
+    this.target.xPosition = -1 * this.width/3.6;
     this.target.yPosition = 0;
 
     // Set up score and timer
@@ -171,7 +171,7 @@ class Game {
       // Calculate next target's position
       let randomY = this.height*Math.random() - this.height/2;
       randomY *= 0.8 // Don't let the target get too close to the top/bottom of the screen
-      this.target.setPosition(-200, randomY);
+      this.target.setPosition(-this.width/3.6, randomY);
 
       // Reset snake's rotational velocity multiplier
       this.snake.rotationalVelocityMultiplier = this.snake.initialRotationalVelocityMultiplier;
@@ -215,7 +215,7 @@ class Game {
           // Restart game
           // this.isInPlay = false;
           this.gameOver = true;
-          this.target.setPosition(50, 1000);
+          this.target.setPosition(this.width/15, this.width*2);
           this.deathSound.addEventListener('ended', () => {
             this.isInPlay = false;
             this.gameOver = false;
@@ -227,7 +227,7 @@ class Game {
       }
       
       // SPEED UPDATE: Move faster as score increases
-      this.snake.linearVelocityMultiplier = 55 + 2*this.score;
+      this.snake.linearVelocityMultiplier = (55 + 2*this.score)*this.width/720;
       this.snake.initialRotationalVelocityMultiplier = 1.5 * this.snake.linearVelocityMultiplier/75;
       // console.log(`Speed: ${this.snake.linearVelocityMultiplier.toFixed(0)}`);
     }
@@ -236,7 +236,7 @@ class Game {
   // Draw current score in upper-left corner
   scoreDraw() {
     this.context.save();
-    this.context.font = "20px sans-serif";
+    this.context.font = `${this.height/12}px sans-serif`;
     this.context.textAlign = "left";
     this.context.textBaseline = "top"
     this.context.fillText(`SCORE: ${this.score}`, -this.width/2, -this.height/2);

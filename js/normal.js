@@ -57,12 +57,12 @@ class Snongol {
     this.game.context.save()
     this.game.context.textAlign = 'center';
     this.game.context.textBaseline = 'middle';
-    this.game.context.font = '80px Merienda';
-    this.game.context.fillText("SNONGOL", 0, -30);
-    this.game.context.font = "30px Merienda";
-    this.game.context.fillText("(Snake Mongol)", 0, 20);
-    this.game.context.font = "30px serif";
-    this.game.context.fillText("oh gosh oh no what is happening", 0, 100);
+    this.game.context.font = `${this.game.width/3}px Merienda`;
+    this.game.context.fillText("SNONGOL", 0, -this.game.width/8);
+    this.game.context.font = `${this.game.width/8}px Merienda`;
+    this.game.context.fillText("(Snake Mongol)", 0, this.game.width/12);
+    this.game.context.font = `${this.game.width/8}px serif`;
+    this.game.context.fillText("oh gosh oh no what is happening", 0, this.game.width/2.4);
     // this.game.context.fillText("Press A to begin", 0, 100);
     this.game.context.restore();
   }
@@ -132,7 +132,7 @@ class Snongol {
   update(dt) {
     /////////////////// Update snake with Mongol rules
     // Update linear velocity
-    this.snake.linearVelocity = 125; //this.snake.linearVelocityMultiplier * (1.5 - 0.5*Math.cos(Math.PI*2 / this.snake.toTarget * this.snake.dist([this.game.target.xPosition, this.game.target.yPosition], [this.snake.xPosition, this.snake.yPosition])));
+    this.snake.linearVelocity = this.game.width/2; //this.snake.linearVelocityMultiplier * (1.5 - 0.5*Math.cos(Math.PI*2 / this.snake.toTarget * this.snake.dist([this.game.target.xPosition, this.game.target.yPosition], [this.snake.xPosition, this.snake.yPosition])));
     // Compute new rotational velocity
     let dX = this.game.target.xPosition - this.snake.xPosition;
     let dY = this.game.target.yPosition - this.snake.yPosition;
@@ -141,10 +141,10 @@ class Snongol {
     // If y is very negative, make it rotate clockwise
     // if y is very positive, make it rotate anticlockwise
     // Else; ensure it's in the range (-pi, pi]
-    if (this.snake.yPosition < -25) {
+    if (this.snake.yPosition < -this.game.width/9) {
       // If newAngle is significantly anti-clockwise, unwrap it
       while (newAngle < -0.1) { newAngle += 2*Math.PI; }
-    } else if (this.snake.yPosition > 25) {
+    } else if (this.snake.yPosition > this.game.width/9) {
       while (newAngle > 0.1) { newAngle -= 2*Math.PI; }
     } else {
       while (newAngle <= -Math.PI) { newAngle += 2*Math.PI; }
@@ -212,7 +212,7 @@ class Snongol {
     let i = 0;
     let j = 0;
     let dx = 0;
-    this.game.context.font = '40px NotoSansMongolianRegular';
+    this.game.context.font = `40px NotoSansMongolianRegular`;
     this.snake.rotatedChar(this.snake.text.join(''), this.snake.pathPoints[0][2]*180/Math.PI, this.snake.pathPoints[0][0], this.snake.pathPoints[0][1]);
     // for (let char of [...this.snake.text]) {
     //   // Draw character using [x,y,heading] at this.pathPoints[i]
